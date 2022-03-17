@@ -9,7 +9,7 @@ import { Neo4jConfig } from "src/Global/interfaces/neo4j-config.interface";
  */
 export const createDriver = async (config:Neo4jConfig):Promise<Driver> => {
     let uri:string = `${config.scheme}://${config.host}`;
-    uri += config.database != "default" ? "." + config.database : "";
+    uri += config.database != "default" ? "." + config.database + ":" : ":";
     uri += config.port;
     const driver = neo4j.driver(uri,
         neo4j.auth.basic(config.username, config.password),
@@ -20,6 +20,6 @@ export const createDriver = async (config:Neo4jConfig):Promise<Driver> => {
               }
         }
     );
-    await driver.verifyConnectivity();    
+    await driver.verifyConnectivity();
     return driver;
 }

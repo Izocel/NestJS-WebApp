@@ -9,10 +9,11 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 
 import { MongooseModule } from '@nestjs/mongoose';
+import { Neo4jConfig } from './Global/interfaces/neo4j-config.interface';
 import { Neo4jModule } from './neo4j/neo4j.module';
 
 import { ProduitFournisseursModule } from './produitsFournisseurs/produitFournisseurs.module';
-import { Neo4jConfig } from './Global/interfaces/neo4j-config.interface';
+import { MovieModule } from './movie/movie.module';
 
 
 function getMongoUrl(): string{
@@ -25,7 +26,7 @@ function getNeo4jConfig() : Neo4jConfig{
     env.neo4jDevConfObj : env.neo4jConfObj;
     const cnfObj:any = JSON.parse(jsonString);
     if(! cnfObj.database)
-      cnfObj.database = "default";
+      cnfObj.database = "";
     return cnfObj;
 }
 
@@ -36,7 +37,9 @@ function getNeo4jConfig() : Neo4jConfig{
     UserModule,
     MongooseModule.forRoot(getMongoUrl()),
     Neo4jModule.forRoot(getNeo4jConfig()),
+    MovieModule,
     ProduitFournisseursModule,
+    MovieModule,
   ],
   controllers: [AppController],
   providers: [AppService],

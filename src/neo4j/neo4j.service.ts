@@ -9,6 +9,7 @@ const WX = neo4j.session.WRITE;
 
 @Injectable()
 export class Neo4jService {
+
 	constructor
 		(
 			@Inject(NEO4J_CONFIG) private readonly config: Neo4jConfig,
@@ -36,37 +37,42 @@ export class Neo4jService {
 		});
 	}
 
-	getWriteSession(db:string = this.config.database):Session {
+	getWriteSession(bookmrks:string | string[] = "", 
+		db:string = this.config.database):Session {
 		return this.driver.session({
 			database: db,
-			defaultAccessMode: WX
+			defaultAccessMode: WX,
+			bookmarks: bookmrks
 		});
 	}
 
-	async read(cypher: string, params: Record<string, any>,
+	async read(cypher: string, params: Record<string, any> = {},
 		db:string = this.config.database): Promise<Result> {
 			const session = this.getReadSession(db);
 			return await session.run(cypher,params);
 	}
 
-	async readTransaction(cypher: string, params: Record<string, any>,
+	async readTransaction(cypher: string, params: Record<string, any> = {},
 		db:string = this.config.database): Promise<Result> {
 			const session = this.getReadSession(db);
-			const transaction = await session.beginTransaction();
-			return await session.readTransaction(() => transaction.run(cypher,params));
+			return await (session.readTransaction(() => this.read(cypher,params))
+			.then(results => {
+				session._transactionClosed()
+				session.close()
+				return results;
+			}))
 	}
 
-	async write(cypher: string, params: Record<string, any>,
+	async write(cypher: string, params: Record<string, any> = {},
 		db:string = this.config.database): Promise<Result> {
 			const session = this.getWriteSession(db);
 			return await session.run(cypher,params);
 	}
 
-	async writeTransaction(cypher: string, params: Record<string, any>,
+	async writeTransaction(cypher: string, params: Record<string, any> = {},
 		db:string = this.config.database): Promise<Result> {
 			const session = this.getWriteSession(db);
-			const transaction = await session.beginTransaction();
-			return await session.writeTransaction(() => transaction.run(cypher,params));
+			return await session.writeTransaction(() => this.write(cypher,params));
 	}
 
 
