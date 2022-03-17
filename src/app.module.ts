@@ -12,6 +12,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Neo4jModule } from './neo4j/neo4j.module';
 
 import { ProduitFournisseursModule } from './produitsFournisseurs/produitFournisseurs.module';
+import { Neo4jConfig } from './Global/interfaces/neo4j-config.interface';
 
 
 function getMongoUrl(): string{
@@ -19,11 +20,11 @@ function getMongoUrl(): string{
     env.mongoDevUrl : env.mongoUrl;
 }
 
-// function getNeo4jConObj() : Neo4jConfig{
-//   const jsonString:string = env.enviroment === "dev" ? 
-//     env.neo4jDevConObj : env.neo4jConObj;
-//   return JSON.parse(jsonString);
-// }
+function getNeo4jConObj() : Neo4jConfig{
+  const jsonString:string = env.enviroment === "dev" ? 
+    env.neo4jDevConfObj : env.neo4jConfObj;
+  return JSON.parse(jsonString);
+}
 
 @Module({
   imports: [
@@ -31,7 +32,7 @@ function getMongoUrl(): string{
     AuthModule,
     UserModule,
     MongooseModule.forRoot(getMongoUrl()),
-    Neo4jModule,
+    Neo4jModule.forRoot(getNeo4jConObj()),
     ProduitFournisseursModule,
   ],
   controllers: [AppController],
