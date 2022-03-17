@@ -30,6 +30,7 @@
     "dotenv": "^10.0.0",
     "glob": "^7.2.0",
     "mongoose": "^6.2.6",
+    "neo4j-driver": "^4.4.4",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.4.0"
