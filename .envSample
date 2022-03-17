@@ -1,5 +1,5 @@
 mongoDevUrl=mongodb://root:qwerty@localhost:27017/boutiquekc?authSource=admin
 mongoUrl=mongodb://root:qwerty@localhost:27017/boutiquekc?authSource=admin
-neo4jConfObj={"scheme":"neo4j","host":":813e7167.databases.neo4j.io","port":"7687","username":"neo4j","password":"neo"}
-neo4jDevConfObj={"scheme":"neo4j+s","host":"localhost","port":"7687","username":"neo4j","password":"neo"}
+neo4jConfObj={"scheme":"bolt","host":":813e7167.databases.neo4j.io","port":"7687","username":"neo4j","password":"neo"}
+neo4jDevConfObj={"scheme":"bolt+s","host":"localhost","port":"7687","username":"neo4j","password":"neo"}
 enviroment=dev

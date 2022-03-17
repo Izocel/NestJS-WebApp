@@ -20,10 +20,13 @@ function getMongoUrl(): string{
     env.mongoDevUrl : env.mongoUrl;
 }
 
-function getNeo4jConObj() : Neo4jConfig{
+function getNeo4jConfig() : Neo4jConfig{
   const jsonString:string = env.enviroment === "dev" ? 
     env.neo4jDevConfObj : env.neo4jConfObj;
-  return JSON.parse(jsonString);
+    const cnfObj:any = JSON.parse(jsonString);
+    if(! cnfObj.database)
+      cnfObj.database = "default";
+    return cnfObj;
 }
 
 @Module({
@@ -32,7 +35,7 @@ function getNeo4jConObj() : Neo4jConfig{
     AuthModule,
     UserModule,
     MongooseModule.forRoot(getMongoUrl()),
-    Neo4jModule.forRoot(getNeo4jConObj()),
+    Neo4jModule.forRoot(getNeo4jConfig()),
     ProduitFournisseursModule,
   ],
   controllers: [AppController],
