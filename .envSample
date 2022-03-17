@@ -1,0 +1,3 @@
+mongoDevUrl=mongodb://root:qwerty@localhost:27017/boutiquekc?authSource=admin
+mongoUrl=mongodb://root:qwerty@localhost:27017/boutiquekc?authSource=admin
+enviroment=dev
